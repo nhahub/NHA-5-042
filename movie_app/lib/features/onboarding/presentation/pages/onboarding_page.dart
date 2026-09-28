@@ -14,6 +14,7 @@ class OnboardingPage extends StatefulWidget {
 
 class _OnboardingPageState extends State<OnboardingPage> {
   final _pageController = PageController();
+  int _currentIndex = 0;
 
   static const _pages = [
     (
@@ -42,6 +43,17 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   void _goToLogin() {
     Navigator.pushReplacementNamed(context, LoginPage.routeName);
+  }
+
+  void _handlePrimaryButton() {
+    if (_currentIndex < _pages.length - 1) {
+      _pageController.nextPage(
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      _goToLogin();
+    }
   }
 
   @override
@@ -77,6 +89,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 child: PageView.builder(
                   controller: _pageController,
                   itemCount: _pages.length,
+                  onPageChanged: (index) =>
+                      setState(() => _currentIndex = index),
                   itemBuilder: (context, index) {
                     final page = _pages[index];
                     return OnboardingPageBody(
@@ -91,8 +105,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
               ),
               const SizedBox(height: 28),
               PrimaryButton(
-                label: 'Get Started',
-                onPressed: _goToLogin,
+                label: _currentIndex < _pages.length - 1
+                    ? 'Next'
+                    : 'Get Started',
+                onPressed: _handlePrimaryButton,
               ),
               const SizedBox(height: 24),
             ],
