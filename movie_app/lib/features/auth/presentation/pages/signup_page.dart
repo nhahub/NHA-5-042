@@ -1,43 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/core/colors/app_colors.dart';
-import 'package:movie_app/features/auth/presentation/pages/signup_page.dart';
+import 'package:movie_app/core/widgets/custom_text_field.dart';
+import 'package:movie_app/core/widgets/primary_button.dart';
+import 'package:movie_app/features/auth/presentation/pages/login_page.dart';
 import 'package:movie_app/features/auth/presentation/widgets/auth_footer.dart';
 import 'package:movie_app/features/auth/presentation/widgets/auth_header.dart';
 import 'package:movie_app/features/auth/presentation/widgets/auth_logo.dart';
-import 'package:movie_app/core/widgets/custom_text_field.dart';
-import 'package:movie_app/features/auth/presentation/widgets/forgot_password_button.dart';
-import 'package:movie_app/core/widgets/primary_button.dart';
 import 'package:movie_app/features/auth/presentation/widgets/or_divider.dart';
 import 'package:movie_app/features/auth/presentation/widgets/social_login_row.dart';
 
-class LoginPage extends StatefulWidget {
-  static const String routeName = '/login';
-  const LoginPage({super.key});
+class SignUpPage extends StatefulWidget {
+  static const String routeName = '/signup';
+  const SignUpPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
-  void _handleLogin() {
+  void _handleSignUp() {
     FocusScope.of(context).unfocus();
     if (_formKey.currentState?.validate() ?? false) {
       // TODO: hook up real auth logic
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Logged in successfully')),
+        const SnackBar(content: Text('Account created successfully')),
       );
+    }
+  }
+
+  void _goToLogin() {
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    } else {
+      Navigator.pushReplacementNamed(context, LoginPage.routeName);
     }
   }
 
@@ -64,18 +73,40 @@ class _LoginPageState extends State<LoginPage> {
                         const Center(child: AuthLogo()),
                         const SizedBox(height: 32),
                         const AuthHeader(
-                          title: 'Welcome Back',
-                          subtitle: 'Sign in to continue',
+                          title: 'Create Account',
+                          subtitle: 'Join to start your journey',
                         ),
                         const SizedBox(height: 24),
                         CustomTextField(
+                          controller: _nameController,
+                          hintText: 'Full Name',
+                          prefixIcon: Icons.person_outline_rounded,
+                          keyboardType: TextInputType.name,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Please enter your full name';
+                            }
+                            if (value.trim().length < 3) {
+                              return 'Name must be at least 3 characters';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 14),
+                        CustomTextField(
                           controller: _emailController,
-                          hintText: 'Email or username',
-                          prefixIcon: Icons.alternate_email_rounded,
+                          hintText: 'Email',
+                          prefixIcon: Icons.email_outlined,
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
-                              return 'Please enter your email or username';
+                              return 'Please enter your email';
+                            }
+                            final emailRegex = RegExp(
+                              r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                            );
+                            if (!emailRegex.hasMatch(value.trim())) {
+                              return 'Enter a valid email address';
                             }
                             return null;
                           },
@@ -109,12 +140,10 @@ class _LoginPageState extends State<LoginPage> {
                             return null;
                           },
                         ),
-                        const SizedBox(height: 8),
-                        const ForgotPasswordButton(),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 20),
                         PrimaryButton(
-                          label: 'Login',
-                          onPressed: _handleLogin,
+                          label: 'Sign Up',
+                          onPressed: _handleSignUp,
                         ),
                         const SizedBox(height: 24),
                         const OrDivider(),
@@ -123,10 +152,9 @@ class _LoginPageState extends State<LoginPage> {
                         const Spacer(),
                         const SizedBox(height: 24),
                         AuthFooter(
-                          onAction: () => Navigator.pushNamed(
-                            context,
-                            SignUpPage.routeName,
-                          ),
+                          questionText: 'Already have an account?',
+                          actionText: 'Login',
+                          onAction: _goToLogin,
                         ),
                         const SizedBox(height: 16),
                       ],
