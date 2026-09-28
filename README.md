@@ -18,6 +18,9 @@ lip/
           data/
           domain/
           presentation/
+
+  share/
+      widgets/      
  
   my_app.dart
   main.dart
