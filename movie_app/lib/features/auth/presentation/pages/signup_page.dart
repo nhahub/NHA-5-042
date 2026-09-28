@@ -9,15 +9,15 @@ import 'package:movie_app/features/auth/presentation/widgets/auth_logo.dart';
 import 'package:movie_app/features/auth/presentation/widgets/or_divider.dart';
 import 'package:movie_app/features/auth/presentation/widgets/social_login_row.dart';
 
-class SignInPage extends StatefulWidget {
-  static const String routeName = '/signin';
-  const SignInPage({super.key});
+class SignUpPage extends StatefulWidget {
+  static const String routeName = '/signup';
+  const SignUpPage({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInState();
+  State<SignUpPage> createState() => _SignUpState();
 }
 
-class _SignInState extends State<SignInPage> {
+class _SignUpState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/core/colors/app_colors.dart';
-import 'package:movie_app/features/auth/presentation/pages/signin_page.dart';
+import 'package:movie_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:movie_app/features/auth/presentation/widgets/auth_footer.dart';
 import 'package:movie_app/features/auth/presentation/widgets/auth_header.dart';
 import 'package:movie_app/features/auth/presentation/widgets/auth_logo.dart';
@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                         AuthFooter(
                           onAction: () => Navigator.pushNamed(
                             context,
-                            SignInPage.routeName,
+                            SignUpPage.routeName,
                           ),
                         ),
                         const SizedBox(height: 16),
